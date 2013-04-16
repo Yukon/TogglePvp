@@ -1,0 +1,4 @@
+author: YukonAppleGeek
+main: ${project.groupId}.${project.artifactId}.${project.name}
+name: ${project.name}
+version: ${project.version}
