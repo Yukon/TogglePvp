@@ -2,3 +2,22 @@ author: YukonAppleGeek
 main: ${project.groupId}.${project.artifactId}.${project.name}
 name: ${project.name}
 version: ${project.version}
+
+commands:
+  pvp:
+    description: Toggles pvp
+    usage: /<command> [player] [enabled]
+permissions:
+  togglepvp.*:
+    description: Give all permissions
+    default: op
+    children:
+      togglepvp.self: true
+      togglepvp.other: true
+  togglepvp.self:
+    description: Toggle pvp for self
+    default: true
+  togglepvp.other:
+    description: Toggle pvp for other player
+    default: op
+
