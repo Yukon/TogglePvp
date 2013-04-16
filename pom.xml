@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>me.yukonapplegeek</groupId>
     <artifactId>togglepvp</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>1.0</version>
     <name>TogglePvp</name>
     <repositories>
         <repository>
