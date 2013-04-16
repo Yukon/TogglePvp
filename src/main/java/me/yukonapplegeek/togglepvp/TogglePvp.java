@@ -24,44 +24,53 @@ public class TogglePvp extends JavaPlugin implements Listener {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
             if (sender.hasPermission("togglepvp.self")) {
-                togglePvp(sender, (Player) sender);
+                togglePvp(sender, (Player) sender, null);
                 return true;
             } else {
                 sender.sendMessage(ChatColor.RED + "You do not have permission!");
                 return true;
             }
-        } else if (args.length >= 1) {
-            if (args.length == 1) {
-                if (sender.hasPermission("togglepvp.other")) {
-                    Player player = this.getServer().getPlayer(args[0]);
-                    togglePvp(sender, player);
-                    return true;
+        } else if (args.length == 2) {
+            if (sender.hasPermission("togglepvp.other")) {
+                Player player = this.getServer().getPlayer(args[0]);
+                if (args[1].equalsIgnoreCase("on") || args[1].equalsIgnoreCase("enable") || args[1].equalsIgnoreCase("true")) {
+                    togglePvp(sender, player, true);
                 } else {
-                    sender.sendMessage(ChatColor.RED + "You do not have permission!");
-                    return true;
+                    togglePvp(sender, player, false);
                 }
-            } else if (args.length == 2) {
-                if (sender.hasPermission("togglepvp.other")) {
-                    Player player = this.getServer().getPlayer(args[0]);
-                    togglePvp(sender, player);
-                    return true;
-                } else {
-                    sender.sendMessage(ChatColor.RED + "You do not have permission!");
-                    return true;
-                }
+                return true;
+            } else {
+                sender.sendMessage(ChatColor.RED + "You do not have permission!");
+                return true;
             }
-
         }
         return false;
     }
 
-    private void togglePvp(CommandSender sender, Player player) {
+    private void togglePvp(CommandSender sender, Player player, Boolean enabled) {
         if (player != null) {
             if (player.hasMetadata("pvp")) {
-                boolean pvp = player.getMetadata("pvp").get(0).asBoolean();
-                player.setMetadata("pvp", new FixedMetadataValue(this, !pvp));
+                if (enabled != null) {
+                    player.setMetadata("pvp", new FixedMetadataValue(this, enabled));
+                    sender.sendMessage(ChatColor.YELLOW + "Pvp status has been changed.");
+                } else {
+                    boolean pvp = player.getMetadata("pvp").get(0).asBoolean();
+                    player.setMetadata("pvp", new FixedMetadataValue(this, !pvp));
+                    if (pvp) {
+                        sender.sendMessage(ChatColor.RED + "Pvp disabled!");
+                    } else {
+                        sender.sendMessage(ChatColor.GREEN + "Pvp enabled!");
+                    }
+                }
+
             } else {
-                player.setMetadata("pvp", new FixedMetadataValue(this, true));
+                if (enabled != null) {
+                    player.setMetadata("pvp", new FixedMetadataValue(this, enabled));
+                    sender.sendMessage(ChatColor.YELLOW + "Pvp status has been changed.");
+                } else {
+                    player.setMetadata("pvp", new FixedMetadataValue(this, true));
+                    sender.sendMessage(ChatColor.GREEN + "Pvp enabled!");
+                }
             }
         } else {
             sender.sendMessage(ChatColor.RED + "Player not found!");
